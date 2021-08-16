@@ -1,0 +1,28 @@
+name: mc
+version: RELEASE.2021-07-27T06-46-19Z
+summary: Minio client in a snap
+description: |
+  Minio provides simple S3 API. Use mc to connect with Minio cluster.
+confinement: strict
+grade: stable
+base: core20
+architectures: [amd64]
+assumes: [snapd2.51]
+
+parts:
+  mc:
+    plugin: go
+    source: https://github.com/phvalguima/mc
+    source-tag: RELEASE.2021-07-27T06-46-19Z
+    source-type: git
+    go-channel: 1.16/stable
+    override-build: |
+      # Needed to build minio
+      export GO111MODULE=on
+      snapcraftctl build
+apps:
+  mc:
+    command: bin/mc
+    plugs:
+      - network-bind
+      - network
